@@ -2,6 +2,9 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from io import StringIO
+#pd.set_option('display.max_columns', None)
+
+
 
 def get_tab(url):
 	try:
@@ -26,6 +29,9 @@ def get_tab(url):
 		# Convert the table to a pandas DataFrame
 		df = pd.read_html(StringIO(str(table)))[0]
 		print(df.columns)
+		# Drop the major header row
+		df.columns = df.columns.droplevel(0)
+		print(df.columns)
 	except Exception as err:
 		print(f"Error parsing the webpage: {err}")
 		return None
@@ -49,7 +55,7 @@ if __name__ == "__main__":
 
 	if k_df is not None:
 		print("Successfully extracted the table!")
-		print(k_df.columns)  # Display the column names
+		#print(k_df.columns)  # Display the column names
 		# Save the DataFrame to a CSV file with headers.
 		file_name = "jt"
 		k_df.to_csv(f"{file_name}.csv", index=False)
