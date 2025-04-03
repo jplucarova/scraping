@@ -28,10 +28,12 @@ def get_tab(url):
 
 		# Convert the table to a pandas DataFrame
 		df = pd.read_html(StringIO(str(table)))[0]
-		print(df.columns)
+		#print(df.columns)
 		# Drop the major header row
 		df.columns = df.columns.droplevel(0)
 		print(df.columns)
+		#for i in df.columns:
+		#	print(i)
 	except Exception as err:
 		print(f"Error parsing the webpage: {err}")
 		return None
@@ -44,6 +46,14 @@ def get_tab(url):
 
 		# Reset the index to clean up the DataFrame
 		df = df.reset_index(drop=True)
+		# Remove any rows with 'další' or 'předchozí' in the first column
+		#df = df[~df.map(lambda x: isinstance(x, str) and ("další" in x.lower() or "předchozí" in x.lower())).any(axis=1)]
+		# Drop the row number 20
+		df = df.drop(index=20)
+		# Remove any empty columns
+		df = df.dropna(axis=1, how='all')
+		for i in df.columns:
+			print(i)
 		return df
 		#print(df.iloc[[0],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
 	except Exception as err:
@@ -56,6 +66,8 @@ if __name__ == "__main__":
 	if k_df is not None:
 		print("Successfully extracted the table!")
 		#print(k_df.columns)  # Display the column names
+		# Check the emty columns
+		#print(k_df['Unnamed: 4_level_1 Unnamed: 4_level_2']) # Removed
 		# Save the DataFrame to a CSV file with headers.
 		file_name = "jt"
 		k_df.to_csv(f"{file_name}.csv", index=False)
