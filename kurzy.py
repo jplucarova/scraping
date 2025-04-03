@@ -47,9 +47,9 @@ def get_tab(url):
 		# Reset the index to clean up the DataFrame
 		df = df.reset_index(drop=True)
 		# Remove any rows with 'další' or 'předchozí' in the first column
-		#df = df[~df.map(lambda x: isinstance(x, str) and ("další" in x.lower() or "předchozí" in x.lower())).any(axis=1)]
+		df = df[~df.map(lambda x: isinstance(x, str) and ("další" in x or "předchozí" in x)).any(axis=1)]
 		# Drop the row number 20
-		df = df.drop(index=20)
+		#df = df.drop(index=20)
 		# Remove any empty columns
 		df = df.dropna(axis=1, how='all')
 		for i in df.columns:
