@@ -41,11 +41,6 @@ def get_tab(url):
 		if isinstance(df.columns, pd.MultiIndex):
 			new_columns = [' '.join(filter(None, map(str, col))) for col in df.columns]
 			print(new_columns)
-			#######
-			string1 = "calvin klein design dress calvin klein"
-			words = string1.split()
-			print (" ".join(sorted(set(words), key=words.index)))
-			#######
 			# Remove duplicate column names
 			final_columns = []
 			for col in new_columns:
