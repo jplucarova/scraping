@@ -31,19 +31,29 @@ def get_tab(url):
 		#print(df.columns)
 		# Drop the major header row
 		df.columns = df.columns.droplevel(0)
-		print(df.columns)
+		#print(df.columns)
 		#for i in df.columns:
-		#	print(i)
+			#print(i)
 	except Exception as err:
 		print(f"Error parsing the webpage: {err}")
 		return None
 	try:
-		# Clean the DataFrame
-		# Flatten multi-level column headers if they exist, converting non-strings to strings
 		if isinstance(df.columns, pd.MultiIndex):
-			# Flatten the headers, filter out any NaN or None values
-			df.columns = [' '.join(filter(None, map(str, col))) for col in df.columns]
-
+			new_columns = [' '.join(filter(None, map(str, col))) for col in df.columns]
+			print(new_columns)
+			#######
+			string1 = "calvin klein design dress calvin klein"
+			words = string1.split()
+			print (" ".join(sorted(set(words), key=words.index)))
+			#######
+			# Remove duplicate column names
+			final_columns = []
+			for col in new_columns:
+				words = col.split()
+				unique_words = " ".join(sorted(set(words), key=words.index))
+				final_columns.append(unique_words)
+			# Assign the new column names to the DataFrame
+			df.columns = final_columns
 		# Reset the index to clean up the DataFrame
 		df = df.reset_index(drop=True)
 		# Remove any rows with 'další' or 'předchozí' in the first column
@@ -72,4 +82,6 @@ if __name__ == "__main__":
 		file_name = "jt"
 		k_df.to_csv(f"{file_name}.csv", index=False)
 		print(f"Data saved to '{file_name}.csv'.")
-		print(k_df.iloc[[0,1,2,3],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
+		#print(k_df.iloc[[0,1,2,3],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
+		#for i in range(3):
+			#print(k_df.iloc[[i]])
