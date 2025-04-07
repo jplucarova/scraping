@@ -8,7 +8,7 @@ def get_tab(url):
 	# Initialize an empty DataFrame to store the results
 	df_fin = pd.DataFrame()
 	# Loop through the pages
-	for i in range(1,5):
+	for i in range(53,57):
 		url_i = url + str(i)
 		print(url_i)
 		try:
@@ -76,6 +76,9 @@ def get_tab(url):
 		except Exception as err:
 			print(f"Error cleaning the DataFrame: {err}")
 			return None
+		# Check if the DataFrame is empty
+		if df.empty:
+			break
 		# Append the DataFrame to the final DataFrame
 		try:
 			df_fin = pd.concat([df_fin, df], ignore_index=True)
