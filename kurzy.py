@@ -6,14 +6,14 @@ from io import StringIO
 
 def get_tab(url):
 	# Initialize an empty DataFrame to store the results
-	#df = pd.DataFrame()
+	df_fin = pd.DataFrame()
 	# Loop through the pages
-	for i in range(1,4):
-		url = url + str(i)
-		print(url)
+	for i in range(1,5):
+		url_i = url + str(i)
+		print(url_i)
 		try:
 			# send a GET request to the URL
-			response = requests.get(url)
+			response = requests.get(url_i)
 			response.raise_for_status()  # check if the request was successful
 		except requests.exceptions.RequestException as err:
 			print(f"Error fetching the webpage: {err}")
@@ -48,7 +48,7 @@ def get_tab(url):
 			if isinstance(df.columns, pd.MultiIndex):
 				# Flatten the MultiIndex columns and filter out None values
 				new_columns = [' '.join(filter(None, map(str, col))) for col in df.columns]
-				print(new_columns)
+				#print(new_columns)
 				# Remove duplicate column names
 				final_columns = []
 				for col in new_columns:
@@ -69,13 +69,22 @@ def get_tab(url):
 			#df = df.drop(index=20)
 			# Remove any empty columns
 			df = df.dropna(axis=1, how='all')
-			for i in df.columns:
-				print(i)
-			return df
+			#for i in df.columns:
+			#	print(i)
+			#return df
 			#print(df.iloc[[0],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
 		except Exception as err:
 			print(f"Error cleaning the DataFrame: {err}")
 			return None
+		# Append the DataFrame to the final DataFrame
+		try:
+			df_fin = pd.concat([df_fin, df], ignore_index=True)
+		except Exception as err:
+			print(f"Error appending DataFrame: {err}")
+			return None
+	# Reset the index of the final DataFrame
+	df_fin = df_fin.reset_index(drop=True)
+	return df_fin
 
 if __name__ == "__main__":
 	k_df = get_tab("https://www.kurzy.cz/podilove-fondy/jtam/jt-opportunity-czk/statistiky/cela-historie/?page=")
