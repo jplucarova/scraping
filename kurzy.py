@@ -49,7 +49,9 @@ def get_tab(url):
 				# Split the column name into words (a list of strings), whitespace is the default delimiter
 				words = col.split()
 				# create a set from the list "words" to remove duplicates, sort by indexes of the words list, join the words with whitespace as separator
-				unique_words = " ".join(sorted(set(words), key=words.index))
+				#unique_words = " ".join(sorted(set(words), key=words.index))
+				# Remove duplicates by creating a dictionary using the list words as keys, list it, join the words with whitespace as separator
+				unique_words = " ".join(list(dict.fromkeys(words)))
 				final_columns.append(unique_words)
 			# Assign the new column names to the DataFrame
 			df.columns = final_columns
