@@ -4,8 +4,6 @@ from bs4 import BeautifulSoup
 from io import StringIO
 #pd.set_option('display.max_columns', None)
 
-
-
 def get_tab(url):
 	try:
 		# send a GET request to the URL
@@ -38,13 +36,19 @@ def get_tab(url):
 		print(f"Error parsing the webpage: {err}")
 		return None
 	try:
+		# Clean the DataFrame
+		# Flatten the MultiIndex columns if they exist
+		# Check if the DataFrame has a MultiIndex for columns
 		if isinstance(df.columns, pd.MultiIndex):
+			# Flatten the MultiIndex columns and filter out None values
 			new_columns = [' '.join(filter(None, map(str, col))) for col in df.columns]
 			print(new_columns)
 			# Remove duplicate column names
 			final_columns = []
 			for col in new_columns:
+				# Split the column name into words (a list of strings), whitespace is the default delimiter
 				words = col.split()
+				# create a set from the list "words" to remove duplicates, sort by indexes of the words list, join the words with whitespace as separator
 				unique_words = " ".join(sorted(set(words), key=words.index))
 				final_columns.append(unique_words)
 			# Assign the new column names to the DataFrame
