@@ -2,15 +2,19 @@ import requests
 import pandas as pd
 from bs4 import BeautifulSoup
 from io import StringIO
+import time
 #pd.set_option('display.max_columns', None)
 
 def get_tab(url):
 	# Initialize an empty DataFrame to store the results
 	df_fin = pd.DataFrame()
 	# Loop through the pages
-	for i in range(53,57):
+	i = 1
+	# Loop through the pages until the DataFrame is empty
+	while True:
 		url_i = url + str(i)
 		print(url_i)
+		i += 1
 		try:
 			# send a GET request to the URL
 			response = requests.get(url_i)
@@ -88,6 +92,7 @@ def get_tab(url):
 	# Reset the index of the final DataFrame
 	df_fin = df_fin.reset_index(drop=True)
 	return df_fin
+	time.sleep(1)  # Sleep for 1 second to avoid overwhelming the server
 
 if __name__ == "__main__":
 	k_df = get_tab("https://www.kurzy.cz/podilove-fondy/jtam/jt-opportunity-czk/statistiky/cela-historie/?page=")
@@ -104,3 +109,4 @@ if __name__ == "__main__":
 		#print(k_df.iloc[[0,1,2,3],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
 		#for i in range(3):
 			#print(k_df.iloc[[i]])
+#argparse.ArgumentParser(description="Extract and save data from a webpage.")
