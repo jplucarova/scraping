@@ -3,6 +3,7 @@ import pandas as pd
 from bs4 import BeautifulSoup
 from io import StringIO
 import time
+import argparse
 #pd.set_option('display.max_columns', None)
 
 def get_tab(url):
@@ -94,19 +95,41 @@ def get_tab(url):
 	return df_fin
 	time.sleep(1)  # Sleep for 1 second to avoid overwhelming the server
 
-if __name__ == "__main__":
-	k_df = get_tab("https://www.kurzy.cz/podilove-fondy/jtam/jt-opportunity-czk/statistiky/cela-historie/?page=")
+#if __name__ == "__main__":
+#	k_df = get_tab("https://www.kurzy.cz/podilove-fondy/jtam/jt-opportunity-czk/statistiky/cela-historie/?page=")
 
-	if k_df is not None:
-		print("Successfully extracted the table!")
-		#print(k_df.columns)  # Display the column names
-		# Check the emty columns
-		#print(k_df['Unnamed: 4_level_1 Unnamed: 4_level_2']) # Removed
-		# Save the DataFrame to a CSV file with headers.
-		file_name = "jt"
-		k_df.to_csv(f"{file_name}.csv", index=False)
-		print(f"Data saved to '{file_name}.csv'.")
-		#print(k_df.iloc[[0,1,2,3],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
-		#for i in range(3):
-			#print(k_df.iloc[[i]])
+#	if k_df is not None:
+#		# Save the DataFrame to a CSV file with headers.
+#		file_name = "jt"
+#		k_df.to_csv(f"{file_name}.csv", index=False)
+#		print(f"Data saved to '{file_name}.csv'.")
 #argparse.ArgumentParser(description="Extract and save data from a webpage.") url from argument, set output file as argument
+def save_output(df, output_path):
+	if output_path.endswith('.csv'):
+		df.to_csv(output_path, index=False)
+	elif output_path.endswith('.json'):
+		df.to_json(output_path, orient='records', lines=True)
+	elif output_path.endswith('.xls') or output_path.endswith('.xlsx'):
+		df.to_excel(output_path, index=False)
+	else:
+		raise ValueError("Unsupported file format. Use .csv, .json, .xls(x)")
+
+def main():
+	parser = argparse.ArgumentParser(description="Web scraper using requests")
+	parser.add_argument("url", help="URL to scrape from")
+	parser.add_argument("-o", "--output", help="Optional: Output file name with extension (.csv, .json, .xls, .xlsx)")
+
+	args = parser.parse_args()
+
+	df = get_tab(args.url)
+	if df.empty:
+			print("No data scraped.")
+	elif args.output:
+		save_output(df, args.output)
+		print(f"Scraped data saved to {args.output}")
+	else:
+		print("No output file specified. Here's the DataFrame:\n")
+		print(df)
+
+if __name__ == "__main__":
+	main()
