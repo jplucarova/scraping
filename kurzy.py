@@ -13,7 +13,7 @@ def get_tab(url):
 	i = 1
 	# Loop through the pages until the DataFrame is empty
 	while True:
-		url_i = url + str(i)
+		url_i = url + "?page=" + str(i)
 		print(url_i)
 		i += 1
 		try:
