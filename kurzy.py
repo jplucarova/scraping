@@ -109,4 +109,4 @@ if __name__ == "__main__":
 		#print(k_df.iloc[[0,1,2,3],[0, 1, 2]])  # Display the first few rows and columns of the DataFrame
 		#for i in range(3):
 			#print(k_df.iloc[[i]])
-#argparse.ArgumentParser(description="Extract and save data from a webpage.")
+#argparse.ArgumentParser(description="Extract and save data from a webpage.") url from argument, set output file as argument
